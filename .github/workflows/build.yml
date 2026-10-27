@@ -1,0 +1,33 @@
+name: build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['8', '17']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: maven
+      - name: mvn clean verify
+        run: mvn -B -s .mvn-settings.xml clean verify
+      - name: Check bytecode major 52
+        run: |
+          jar=target/jmeter-interval-controller-*.jar
+          javap -verbose -classpath $jar com.example.jmeter.interval.IntervalController | grep 'major version: 52'
+      - name: Upload build artifact (CI only; not a release publish)
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-interval-controller-jdk${{ matrix.java }}
+          path: target/jmeter-interval-controller-*.jar

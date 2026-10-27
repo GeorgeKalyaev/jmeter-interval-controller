@@ -1,0 +1,57 @@
+# Build
+target/
+*.class
+*.jar
+!release/*.jar
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.swp
+*~
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary
+*.log
+*.tmp
+*.bak
+hs_err_pid*
+replay_pid*
+
+# JMeter runtime artifacts
+*.jtl
+*.csv
+!examples/**/*.csv
+jmeter.log
+bin/
+results/
+out/
+
+# Local tools / private verification (never publish)
+.tools/
+verification-*/
+release-*-review/
+final-review/
+release-review/
+DELIVERY-*/
+publication-prep-*/
+private-notes/
+tmp-notes/
+*_HANDOFF.md
+*_REVIEW.md
+
+# Secrets
+.env
+*.pem
+*.p12
+*.jks
+credentials.json
+secrets/

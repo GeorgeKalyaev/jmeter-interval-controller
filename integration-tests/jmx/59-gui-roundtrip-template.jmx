@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="gui-roundtrip-template" enabled="true">
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="refresh_ms" elementType="Argument">
+            <stringProp name="Argument.name">refresh_ms</stringProp>
+            <stringProp name="Argument.value">200</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="token_ttl" elementType="Argument">
+            <stringProp name="Argument.name">token_ttl</stringProp>
+            <stringProp name="Argument.value">3600</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG" enabled="true">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <stringProp name="LoopController.loops">3</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <com.example.jmeter.interval.IntervalController guiclass="com.example.jmeter.interval.IntervalControllerGui" testclass="com.example.jmeter.interval.IntervalController" testname="IC_GUI" enabled="true">
+          <stringProp name="IntervalController.intervalValue">${refresh_ms}</stringProp>
+          <stringProp name="IntervalController.timeUnit">MILLISECONDS</stringProp>
+          <boolProp name="IntervalController.executeOnFirstIteration">true</boolProp>
+          <stringProp name="IntervalController.intervalMode">EXECUTION_COMPLETION</stringProp>
+          <boolProp name="IntervalController.retryOnFailure">true</boolProp>
+          <stringProp name="IntervalController.retryDelay">100</stringProp>
+          <stringProp name="IntervalController.retryDelayUnit">MILLISECONDS</stringProp>
+          <longProp name="IntervalController.maxRetries">2</longProp>
+          <stringProp name="IntervalController.jitterValue">10</stringProp>
+          <stringProp name="IntervalController.jitterUnit">MILLISECONDS</stringProp>
+          <stringProp name="IntervalController.jitterMode">POSITIVE</stringProp>
+          <boolProp name="IntervalController.dynamicInterval">true</boolProp>
+          <stringProp name="IntervalController.tokenExpirationVar">token_ttl</stringProp>
+          <stringProp name="IntervalController.tokenIssuedAtVar">token_ttl__issued_at_ms</stringProp>
+          <stringProp name="IntervalController.expirationFormat">TTL_SECONDS</stringProp>
+          <stringProp name="IntervalController.refreshBefore">5</stringProp>
+          <stringProp name="IntervalController.refreshBeforeUnit">SECONDS</stringProp>
+          <stringProp name="IntervalController.forceRefreshVar">interval_controller_force_refresh</stringProp>
+        </com.example.jmeter.interval.IntervalController>
+        <hashTree>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Tick" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">SampleResult.setSuccessful(true)</stringProp>
+          </JSR223Sampler>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

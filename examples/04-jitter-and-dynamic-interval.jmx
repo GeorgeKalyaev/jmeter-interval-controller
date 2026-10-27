@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="04-jitter-and-dynamic-interval" enabled="true">
+      <stringProp name="TestPlan.comments">DEMO: Dynamic Interval reads ${dyn_interval} milliseconds; Positive jitter up to 50ms. SetInterval runs every loop before IC.</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <stringProp name="LoopController.loops">8</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="SetInterval" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script"><![CDATA[
+vars.put("dyn_interval", "150")
+SampleResult.setSuccessful(true)
+]]></stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        <com.example.jmeter.interval.IntervalController guiclass="com.example.jmeter.interval.IntervalControllerGui" testclass="com.example.jmeter.interval.IntervalController" testname="Dynamic + Jitter IC" enabled="true">
+          <stringProp name="IntervalController.intervalValue">${dyn_interval}</stringProp>
+          <stringProp name="IntervalController.timeUnit">MILLISECONDS</stringProp>
+          <boolProp name="IntervalController.executeOnFirstIteration">true</boolProp>
+          <stringProp name="IntervalController.intervalMode">EXECUTION_COMPLETION</stringProp>
+          <boolProp name="IntervalController.retryOnFailure">false</boolProp>
+          <stringProp name="IntervalController.retryDelay">5</stringProp>
+          <stringProp name="IntervalController.retryDelayUnit">SECONDS</stringProp>
+          <longProp name="IntervalController.maxRetries">0</longProp>
+          <stringProp name="IntervalController.jitterValue">50</stringProp>
+          <stringProp name="IntervalController.jitterUnit">MILLISECONDS</stringProp>
+          <stringProp name="IntervalController.jitterMode">POSITIVE</stringProp>
+          <boolProp name="IntervalController.dynamicInterval">true</boolProp>
+          <stringProp name="IntervalController.tokenExpirationVar"></stringProp>
+          <stringProp name="IntervalController.tokenIssuedAtVar"></stringProp>
+          <stringProp name="IntervalController.expirationFormat">UNIX_MILLISECONDS</stringProp>
+          <stringProp name="IntervalController.refreshBefore">30</stringProp>
+          <stringProp name="IntervalController.refreshBeforeUnit">SECONDS</stringProp>
+          <stringProp name="IntervalController.forceRefreshVar">interval_controller_force_refresh</stringProp>
+        </com.example.jmeter.interval.IntervalController>
+        <hashTree>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="DynTick" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script"><![CDATA[
+SampleResult.setSuccessful(true)
+SampleResult.setResponseMessage("dyn-tick")
+]]></stringProp>
+          </JSR223Sampler>
+          <hashTree/>
+        </hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Pace" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script"><![CDATA[
+Thread.sleep(50)
+SampleResult.setSuccessful(true)
+]]></stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
